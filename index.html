@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Ringmaster</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header id="resources">◉ 0</header>                   <!-- top bar; <header> describes its role, and the id lets JS find it later to update coins -->
+  <main id="troupe">                                    <!-- the scrolling middle; <main> marks the page's primary content -->
+    <div class="card mat-fabric">Fabric test</div>      <!-- test card: "card" gives the shared shape, "mat-fabric" picks the color -->
+    <div class="card mat-wood">Wood test</div>          <!-- one test card per material, so you can compare all five at once -->
+    <div class="card mat-clay">Clay test</div>
+    <div class="card mat-metal">Metal test</div>
+    <div class="card mat-glass">Glass test</div>        <!-- five cards should overflow a phone screen, which tests the scrolling too -->
+  </main>
+  <footer id="actions">                                 <!-- bottom bar; <footer> describes its role -->
+    <button>Scavenge</button>                           <!-- real <button> elements work with taps and keyboards with no extra code -->
+    <button>Hire · 15</button>
+  </footer>
+</body>
+
+</html>
