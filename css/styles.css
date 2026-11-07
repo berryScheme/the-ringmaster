@@ -1,0 +1,58 @@
+:root {                                   /* :root is the top of the page, so variables set here are visible everywhere */
+  --void: rgb(10, 12, 18);                /* void black from your palette doc: the backdrop */
+  --white: rgb(255, 248, 245);            /* default white with a faint pink warmth, per your rules */
+  --mat-fabric: rgb(110, 68, 80);         /* dusty rose, dark enough that white text stays readable */
+  --mat-wood:   rgb(107, 74, 43);         /* warm amber-brown */
+  --mat-clay:   rgb(138, 74, 50);         /* terracotta */
+  --mat-metal:  rgb(62, 67, 74);          /* gunmetal grey */
+  --mat-glass:  rgb(106, 100, 128);       /* frosted lavender (placeholder): a lighter world-purple, avoiding magic cyan */
+}
+
+html, body {                              /* the two outermost elements */
+  margin: 0;                              /* browsers add an 8px margin by default; removing it lets the bars touch the screen edges */
+}
+
+
+body {
+  height: 100dvh;                         /* exactly the visible phone screen, so the bottom bar never hides under the address bar */
+  display: flex;                          /* turns body into a flex container that arranges its children */
+  flex-direction: column;                 /* stacks them top to bottom: header, main, footer */
+  background: var(--void);                /* var() reads a variable, so the backdrop is void black */
+  color: var(--white);                    /* default text color; children inherit it unless they set their own */
+  font-family: system-ui, sans-serif;     /* uses the phone's own interface font, which looks native and needs no download */
+}
+
+#resources, #actions {                    /* both pinned bars share these rules */
+  flex: none;                             /* don't grow or shrink: each bar stays exactly as tall as its content */
+  padding: 12px 16px;                     /* 12px above and below, 16px on the sides, so content isn't jammed against the edges */
+}
+
+#troupe {
+  flex: 1;                                /* takes all the leftover height between the two bars */
+  min-height: 0;                          /* flex children won't shrink below their content by default; this allows it, so scrolling can happen */
+  overflow-y: auto;                       /* shows a vertical scroll only when the cards don't fit, and only here */
+  padding: 0 16px;                        /* same side gutter as the bars, so everything lines up */
+}
+
+#actions {
+  display: flex;                          /* lays the two buttons out side by side */
+  gap: 12px;                              /* space between them; simpler than giving each button its own margin */
+}
+
+.card {                                   /* the shape every performer card shares */
+  background: var(--mat);                 /* each card's color comes from a variable the material class sets below */
+  border-radius: 16px;                    /* rounded corners */
+  padding: 16px;                          /* space between the card's edge and its contents */
+  margin-bottom: 12px;                    /* space between stacked cards */
+  min-height: 160px;                      /* placeholder height so the test cards are big enough to judge the color */
+}
+
+.mat-fabric { --mat: var(--mat-fabric); } /* each material class only fills in --mat; .card reads it, so one card rule serves every material */
+.mat-wood   { --mat: var(--mat-wood); }
+.mat-clay   { --mat: var(--mat-clay); }
+.mat-metal  { --mat: var(--mat-metal); }
+.mat-glass  { --mat: var(--mat-glass); }
+
+#actions button {
+    flex: 1;
+}
