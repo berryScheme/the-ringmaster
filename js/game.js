@@ -87,5 +87,6 @@ function buildCard(p) {                               // p is one performer obje
     level: el.querySelector(".level"),                // level text, updated with textContent
   };
 }
-
 game.performers.forEach(buildCard);                   // forEach runs buildCard once for each performer in the array, in order                            // temporary check: open game.performers[0] in the console to see your clown
+
+game.performers.forEach(buildCard);
