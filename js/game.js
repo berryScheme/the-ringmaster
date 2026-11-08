@@ -7,7 +7,7 @@ const TUNE = {                // const: TUNE is never replaced, only read (and m
   minCap: 20,                 // injuries can never push the cap below this
   basePay: 2,                 // coins per successful trick, before the material multipliers
   xpPerTrick: 3,
-  xp: 30,
+  xpBase: 30,
   xpGrowth: 2,              // XP per finished trick, before the material's XP multiplier
   scavTime: 3,                // seconds one scavenge takes
   scavMaterialChance: 0.8,    // decimal chance a scavenge finds a material (otherwise 3 coins); compared directly against Math.random()
