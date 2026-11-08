@@ -1,11 +1,11 @@
 :root {                                   /* :root is the top of the page, so variables set here are visible everywhere */
   --void: rgb(10, 12, 18);                /* void black from your palette doc: the backdrop */
   --white: rgb(255, 248, 245);            /* default white with a faint pink warmth, per your rules */
-  --mat-fabric: rgb(110, 68, 80);         /* dusty rose, dark enough that white text stays readable */
+  --mat-fabric: rgb(95, 39, 55);         /* dusty rose, dark enough that white text stays readable */
   --mat-wood:   rgb(108, 68, 31);         /* warm amber-brown */
   --mat-clay:   rgb(138, 79, 50);         /* terracotta */
-  --mat-metal:  rgb(42, 43, 45);          /* gunmetal grey */
-  --mat-glass:  rgb(159, 190, 196);       /* frosted lavender (placeholder): a lighter world-purple, avoiding magic cyan */
+  --mat-metal:  rgb(37, 42, 38);          /* gunmetal grey */
+  --mat-glass:  rgb(108, 150, 158);       /* frosted lavender (placeholder): a lighter world-purple, avoiding magic cyan */
 }
 
 html, body {                              /* the two outermost elements */
@@ -55,6 +55,7 @@ body {
 
 #actions button {
     flex: 1;
+    height: 60px;
 }
 
 .name, .level {                        /* the text above and below the rings */
