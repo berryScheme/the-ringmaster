@@ -89,4 +89,18 @@ function buildCard(p) {                               // p is one performer obje
 }
 game.performers.forEach(buildCard);                   // forEach runs buildCard once for each performer in the array, in order                            // temporary check: open game.performers[0] in the console to see your clown
 
-game.performers.forEach(buildCard);
+const resourcesEl = document.getElementById("resources");
+let last = performance.now();
+let elapsed = 0;
+
+function loop(now) {
+  const dt = Math.min((now - last) / 1000, 0.25);
+  last = now;
+
+  elapsed += dt;
+  resourcesEl.textContent = elapsed.toFixed(1) + "s";
+
+  requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);
