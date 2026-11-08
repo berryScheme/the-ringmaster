@@ -22,8 +22,6 @@ const MATERIALS = {
   glass:  { repTime: 2.5, success: 0.55, pay: 1.0, crowd: 1.0, xp: 1 , perfChance: 0.1},  // its special Perfect rule comes next (your turn)
 };
 
-console.log("Game data loaded:", TUNE, MATERIALS);  // temporary check: prints both tables to the console; delete once confirmed
-
 // ===== NAME PARTS: a random first + last gives each performer a name =====
 const NAMES_FIRST = ["Fez", "Perri", "Bo", "Mungo", "Dot", "Fizz"];        // arrays, because we pick by random position
 const NAMES_LAST  = ["Magnifico", "Puddle", "Figarro", "Galileo", "Tumble", "Ploof"];
