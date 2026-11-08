@@ -24,5 +24,44 @@ const MATERIALS = {
 
 console.log("Game data loaded:", TUNE, MATERIALS);  // temporary check: prints both tables to the console; delete once confirmed
 
-const mat = "glass";
-console.log(MATERIALS[mat].perfChance);
+// ===== NAME PARTS: a random first + last gives each performer a name =====
+const NAMES_FIRST = ["Pip", "Bo", "Tilly", "Mungo", "Dot", "Fizz"];        // arrays, because we pick by random position
+const NAMES_LAST  = ["Magnifico", "Puddle", "Stitchwick", "Bramble", "Tumble", "Ploof"];
+
+// ===== GAME STATE: everything that changes during play, in one object =====
+const game = {                                   // const: we change what's inside game, but never replace game itself
+  coins: 0,                                      // spendable money
+  hired: 0,                                      // how many hires so far; the next price is baseCost × costGrowth^hired
+  nextId: 1,                                     // a counter so every performer gets a unique id, even if two share a name
+  inv: { fabric: 0, wood: 0, clay: 0, metal: 0, glass: 0 },  // material counts, keyed by the same names as MATERIALS so lookups match
+  scav: { active: false, t: 0 },                 // is a scavenge running, and how many seconds into it
+  performers: [],                                // the troupe: an array, kept in hiring order
+  log: [],                                       // recent event lines, newest first
+};
+
+// ===== HELPERS =====
+function pick(list) {                            // returns one random item from any array
+  return list[Math.floor(Math.random() * list.length)];   // same index math as the dice roller
+}
+
+function makePerformer(material) {               // builds one fresh performer of the given material
+  return {                                       // returns a new object each call, so performers never share fields
+    id: game.nextId++,                           // uses the current id, then adds 1 for next time (++ after the name means "use, then add")
+    name: pick(NAMES_FIRST) + " " + pick(NAMES_LAST),  // + joins text: "Pip" + " " + "Puddle"
+    kind: "clown",                               // every performer is a clown for now; other kinds are parked
+    material: material,                          // the word passed in, e.g. "glass", which matches a MATERIALS key
+    stamina: TUNE.baseCap,                       // arrives fully rested
+    injuries: 0,
+    mode: "rest",                                // starts off stage; the player sends them to Perform
+    trick: 0,                                    // trick progress from 0 to 1; only moves in Perform
+    xp: 0,
+  };
+}
+
+// ===== START: the starter clown, with a random material =====
+game.performers.push(makePerformer(pick(Object.keys(MATERIALS))));  // Object.keys gives ["fabric","wood",...]; pick chooses one; push adds the clown
+console.log(game);                               // temporary check: open game.performers[0] in the console to see your clown
+
+game.performers.push(makePerformer(pick(Object.keys("metal"))));
+
+console.log(game.performers[1].name);

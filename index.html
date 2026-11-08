@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,14 +26,14 @@
     </div>     <!-- test card: "card" gives the shared shape, "mat-fabric" picks the color -->
     <div class="card mat-wood">                                  <!-- same card as before; the material class still sets the color -->
       <div class="name">Hunk, the Plank</div>                        <!-- performer's name above the rings -->
-      <svg class="rings" viewBox="0 0 100 100">                    <!-- viewBox: a private 100×100 grid, so the numbers below stay the same at any display size -->
-        <circle class="track" cx="50" cy="50" r="46" stroke-width="4"/>     <!-- faint full outer circle: shows the trick ring's whole path; r 46 + half the 4 width = 48, which fits inside 50 -->
+      <svg class="rings" viewBox="0 0 100 100">                    
+        <circle class="track" cx="50" cy="50" r="46" stroke-width="4"/>     
         <circle class="fill" cx="50" cy="50" r="46" stroke-width="4"
-                pathLength="100" stroke-dashoffset="80"/>                     <!-- outer TRICK ring: offset 35 means 100 − 35 = 65% done (test value) -->
-        <circle class="track" cx="50" cy="50" r="37" stroke-width="6"/>     <!-- faint full inner circle, slightly thicker so the two rings read as different -->
+                pathLength="100" stroke-dashoffset="80"/>                     
+        <circle class="track" cx="50" cy="50" r="37" stroke-width="6"/>     
         <circle class="fill" cx="50" cy="50" r="37" stroke-width="6"
-                pathLength="100" stroke-dashoffset="10"/>                     <!-- inner XP ring: offset 70 means 30% of the way to the next level (test value) -->
-        <circle class="icon" cx="50" cy="50" r="28"/>                        <!-- placeholder disc where the performer's picture will go -->
+                pathLength="100" stroke-dashoffset="10"/>                     
+        <circle class="icon" cx="50" cy="50" r="28"/>                        
       </svg>
       <div class="level">Lv 2</div>                                <!-- level under the rings, as decided -->
     </div>         <!-- one test card per material, so you can compare all five at once -->
