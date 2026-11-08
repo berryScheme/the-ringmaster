@@ -6,7 +6,9 @@ const TUNE = {                // const: TUNE is never replaced, only read (and m
   injuryCapLoss: 20,          // cap lost per injury
   minCap: 20,                 // injuries can never push the cap below this
   basePay: 2,                 // coins per successful trick, before the material multipliers
-  xpPerTrick: 3,              // XP per finished trick, before the material's XP multiplier
+  xpPerTrick: 3,
+  xp: 30,
+  xpGrowth: 2,              // XP per finished trick, before the material's XP multiplier
   scavTime: 3,                // seconds one scavenge takes
   scavMaterialChance: 0.8,    // decimal chance a scavenge finds a material (otherwise 3 coins); compared directly against Math.random()
   baseCost: 15,               // price of the first hire
@@ -16,8 +18,8 @@ const TUNE = {                // const: TUNE is never replaced, only read (and m
 // ===== MATERIALS: one row per material, filed by name so MATERIALS[performer.material] finds it directly =====
 const MATERIALS = {
   fabric: { repTime: 2.0, success: 0.60, pay: 1.0, crowd: 1.0, xp: 1 },  // quick reps
-  wood:   { repTime: 2.5, success: 0.60, pay: 1.0, crowd: 1.0, xp: 2 },  // learns twice as fast
-  clay:   { repTime: 2.5, success: 0.50, pay: 1.0, crowd: 1.3, xp: 1 },  // bigger crowd, shakier hands
+  wood:   { repTime: 2.25, success: 0.60, pay: 1.0, crowd: 1.0, xp: 2 },  // learns twice as fast
+  clay:   { repTime: 3.0, success: 0.50, pay: 1.0, crowd: 1.3, xp: 1 },  // bigger crowd, shakier hands
   metal:  { repTime: 3.5, success: 0.60, pay: 1.5, crowd: 1.0, xp: 1 },  // pays more, works slower
   glass:  { repTime: 2.5, success: 0.55, pay: 1.0, crowd: 1.0, xp: 1 , perfChance: 0.1},  // its special Perfect rule comes next (your turn)
 };
@@ -42,6 +44,10 @@ function pick(list) {                            // returns one random item from
   return list[Math.floor(Math.random() * list.length)];   // same index math as the dice roller
 }
 
+function xpToNext(level) {                       // XP a performer at this level needs to level up
+  return TUNE.xpBase * TUNE.xpGrowth ** (level - 1);   // level 1 → 30, level 2 → 60, level 3 → 120; (level − 1) so level 1 costs the base
+}
+
 function makePerformer(material) {               // builds one fresh performer of the given material
   return {                                       // returns a new object each call, so performers never share fields
     id: game.nextId++,                           // uses the current id, then adds 1 for next time (++ after the name means "use, then add")
@@ -53,6 +59,7 @@ function makePerformer(material) {               // builds one fresh performer o
     mode: "rest",                                // starts off stage; the player sends them to Perform
     trick: 0,                                    // trick progress from 0 to 1; only moves in Perform
     xp: 0,
+    level: 1,
   };
 }
 
@@ -89,17 +96,50 @@ function buildCard(p) {                               // p is one performer obje
 }
 game.performers.forEach(buildCard);                   // forEach runs buildCard once for each performer in the array, in order                            // temporary check: open game.performers[0] in the console to see your clown
 
+game.performers[0].mode = "perform"; 
+
 const resourcesEl = document.getElementById("resources");
 let last = performance.now();
-let elapsed = 0;
 
+// ===== UPDATE: the rules; changes only game, never the screen =====
+function update(dt) {
+  for (const p of game.performers) {             // for...of: each performer in hiring order; reads more plainly than forEach when there are skips
+    if (p.mode !== "perform") continue;          // guard: resting performers don't move their trick (stamina refill joins here later)
+    const mat = MATERIALS[p.material];           // this performer's material row; the lookup you practiced with brackets
+    p.trick += dt / mat.repTime;                 // fraction of one trick done this frame: 0.016s ÷ 2.0s ≈ 0.008 for fabric
+    if (p.trick >= 1) {                                              // the trick reached the end
+      p.trick -= 1;
+      p.xp += TUNE.xpPerTrick * mat.xp;          // every finished trick earns XP: 3 × the material's multiplier (wood gets 6, everyone else 3)                                                  // next lap, keeping the overshoot
+      if (p.xp >= xpToNext(p.level)) {           // reached this level's cost
+        p.xp -= xpToNext(p.level);               // pay it, keeping the leftover, just like trick −= 1
+        p.level += 1;                            // level up; the next cost automatically doubles through xpToNext
+      }
+      if (Math.random() < mat.success) {                             // roll: e.g. fabric lands 60% of the time
+        const perfect = mat.perfChance > 0 && Math.random() < mat.perfChance;  // glass only: the "> 0" check fails for rows with no perfChance (undefined), so they never roll
+        const pay = TUNE.basePay * mat.pay * mat.crowd * (perfect ? 3 : 1);    // the pay formula; the ternary triples it on a Perfect
+        game.coins += pay;                                           // into the purse; can be fractional (clay pays 2.6), which is fine in state
+      }                                                              // no else: a fumble earns nothing, and the log will say so in a later piece
+    }
+  }
+}
+
+// ===== RENDER: the picture; reads game and changes only the screen =====
+function render() {
+  resourcesEl.textContent = "◉ " + Math.floor(game.coins);          // whole coins only: you never see a coin you can't spend yet
+  for (const p of game.performers) {
+    const c = cards[p.id];                       // this performer's kept references from buildCard
+    c.trick.setAttribute("stroke-dashoffset", 100 - p.trick * 100);  // trick is 0–1, the ring wants 0–100: ×100, then offset = 100 − progress
+    c.xp.setAttribute("stroke-dashoffset", 100 - (p.xp / xpToNext(p.level)) * 100);  // share of this level done, turned into a ring offset
+    c.level.textContent = "Lv " + p.level;       // update the text under the rings
+  }
+}
+
+// ===== GAME LOOP =====
 function loop(now) {
-  const dt = Math.min((now - last) / 1000, 0.25);
+  const dt = Math.min((now - last) / 1000, 0.25);  // seconds since last frame, capped
   last = now;
-
-  elapsed += dt;
-  resourcesEl.textContent = elapsed.toFixed(1) + "s";
-
+  update(dt);                                    // rules first...
+  render();                                      // ...then draw the result, so the screen always shows this frame's state
   requestAnimationFrame(loop);
 }
 
