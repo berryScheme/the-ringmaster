@@ -25,8 +25,8 @@ const MATERIALS = {
 console.log("Game data loaded:", TUNE, MATERIALS);  // temporary check: prints both tables to the console; delete once confirmed
 
 // ===== NAME PARTS: a random first + last gives each performer a name =====
-const NAMES_FIRST = ["Pip", "Bo", "Tilly", "Mungo", "Dot", "Fizz"];        // arrays, because we pick by random position
-const NAMES_LAST  = ["Magnifico", "Puddle", "Stitchwick", "Bramble", "Tumble", "Ploof"];
+const NAMES_FIRST = ["Fez", "Perri", "Bo", "Mungo", "Dot", "Fizz"];        // arrays, because we pick by random position
+const NAMES_LAST  = ["Magnifico", "Puddle", "Figarro", "Galileo", "Tumble", "Ploof"];
 
 // ===== GAME STATE: everything that changes during play, in one object =====
 const game = {                                   // const: we change what's inside game, but never replace game itself
@@ -60,8 +60,34 @@ function makePerformer(material) {               // builds one fresh performer o
 
 // ===== START: the starter clown, with a random material =====
 game.performers.push(makePerformer(pick(Object.keys(MATERIALS))));  // Object.keys gives ["fabric","wood",...]; pick chooses one; push adds the clown
-console.log(game);                               // temporary check: open game.performers[0] in the console to see your clown
+// ===== CARDS: build one card per performer and keep references to its changing parts =====
+const troupeEl = document.getElementById("troupe");   // the empty middle; found once and kept, the same idea as the card references
+const cards = {};                                     // card references filed by performer id, so cards[p.id] jumps straight to one (keyed, like MATERIALS)
 
-game.performers.push(makePerformer(pick(Object.keys("metal"))));
+function buildCard(p) {                               // p is one performer object from game.performers
+  const el = document.createElement("div");           // the card's outer box, not on the page yet
+  el.className = "card mat-" + p.material;            // "card mat-glass": the shared shape plus the material color from CSS
+  // The card's insides, filled from p. Same ring markup as the test cards, but:
+  //  - the two fill rings get an extra class ("trick", "xp") so they can be found below
+  //  - both start at offset 100, meaning 0% done, because a new performer has no progress yet
+  el.innerHTML = `
+    <div class="name">${p.name}</div>
+    <svg class="rings" viewBox="0 0 100 100">
+      <circle class="track" cx="50" cy="50" r="46" stroke-width="4"/>
+      <circle class="fill trick" cx="50" cy="50" r="46" stroke-width="4" pathLength="100" stroke-dashoffset="100"/>
+      <circle class="track" cx="50" cy="50" r="37" stroke-width="6"/>
+      <circle class="fill xp" cx="50" cy="50" r="37" stroke-width="6" pathLength="100" stroke-dashoffset="100"/>
+      <circle class="icon" cx="50" cy="50" r="28"/>
+    </svg>
+    <div class="level">Lv 1</div>
+  `;
+  troupeEl.appendChild(el);                           // puts the finished card on the page, after any existing cards (hiring order)
+  cards[p.id] = {                                     // the "direct lines": found once now, used every frame later
+    el: el,                                           // the whole card, for things like a "resting" look later
+    trick: el.querySelector(".trick"),                // outer ring; el.querySelector searches only inside this card, never another card's ring
+    xp: el.querySelector(".xp"),                      // inner ring
+    level: el.querySelector(".level"),                // level text, updated with textContent
+  };
+}
 
-console.log(game.performers[1].name);
+game.performers.forEach(buildCard);                   // forEach runs buildCard once for each performer in the array, in order                            // temporary check: open game.performers[0] in the console to see your clown

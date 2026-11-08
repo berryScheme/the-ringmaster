@@ -4,7 +4,7 @@
   --mat-fabric: rgb(95, 39, 55);         /* dusty rose, dark enough that white text stays readable */
   --mat-wood:   rgb(108, 68, 31);         /* warm amber-brown */
   --mat-clay:   rgb(138, 79, 50);         /* terracotta */
-  --mat-metal:  rgb(37, 42, 38);          /* gunmetal grey */
+  --mat-metal:  rgb(23, 24, 23);          /* gunmetal grey */
   --mat-glass:  rgb(108, 150, 158);       /* frosted lavender (placeholder): a lighter world-purple, avoiding magic cyan */
 }
 
