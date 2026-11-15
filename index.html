@@ -8,8 +8,16 @@
     <script src="game.js" defer></script>
 </head>
 <body>
-    <header id="resources">
+    <header>
         <h1>The Ringmaster</h1>
+        <section id="resources">
+            <div id="coins-counter"></div>
+            <div class="mat-counter" id="wood-counter"></div>
+            <div class="mat-counter" id="metal-counter"></div>
+            <div class="mat-counter" id="fabric-counter"></div>
+            <div class="mat-counter" id="glass-counter"></div>
+            <div class="mat-counter" id="clay-counter"></div>
+        </section>
     </header>
     <main id="stages">
         <section id="stage">
@@ -23,6 +31,7 @@
                     </g>
                     <circle class="icon" cx="50" cy="50" r="18" fill="black"/>
                 </svg>
+                <div>Level: 1</div>
                 <div class="stamina-bar">
                     <div class="stamina"></div>
                     <div class="damage"></div>
@@ -30,6 +39,7 @@
                 <div class="stamina-counter">Stamina: 100/100</div>
                 <button>Perform</button>
                 <button>Rest</button>
+                <button>Heal</button>
             </div>
         </section>
         <section id="back-stage">
@@ -43,6 +53,7 @@
                     </g>
                     <circle class="icon" cx="50" cy="50" r="18" fill="black"/>
                 </svg>
+                <div>Level: 1</div>
                 <div class="stamina-bar">
                     <div class="stamina"></div>
                     <div class="damage"></div>
@@ -50,8 +61,11 @@
                 <div class="stamina-counter">Stamina: 100/100</div>
                 <button>Perform</button>
                 <button>Rest</button>
+                <button>Heal</button>
             </div>
         </section>
+        <button>Hire</button>
+        <button>Expand Stage</button>
     </main>
     <footer id="player-abilities">
         <button>Scavenge (3 Seconds)</button>
