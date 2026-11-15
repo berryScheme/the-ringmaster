@@ -11,12 +11,12 @@
     <header>
         <h1>The Ringmaster</h1>
         <section id="resources">
-            <div id="coins-counter"></div>
-            <div class="mat-counter" id="wood-counter"></div>
-            <div class="mat-counter" id="metal-counter"></div>
-            <div class="mat-counter" id="fabric-counter"></div>
-            <div class="mat-counter" id="glass-counter"></div>
-            <div class="mat-counter" id="clay-counter"></div>
+            <div id="coins-counter">0 coin</div>
+            <div class="mat-counter" id="wood-counter">0</div>
+            <div class="mat-counter" id="metal-counter">0</div>
+            <div class="mat-counter" id="fabric-counter">0</div>
+            <div class="mat-counter" id="glass-counter">0</div>
+            <div class="mat-counter" id="clay-counter">0</div>
         </section>
     </header>
     <main id="stages">
@@ -31,15 +31,15 @@
                     </g>
                     <circle class="icon" cx="50" cy="50" r="18" fill="black"/>
                 </svg>
-                <div>Level: 1</div>
+                <div class="level">Level: 1</div>
                 <div class="stamina-bar">
                     <div class="stamina"></div>
                     <div class="damage"></div>
                 </div>
                 <div class="stamina-counter">Stamina: 100/100</div>
-                <button>Perform</button>
-                <button>Rest</button>
-                <button>Heal</button>
+                <button id="perform-btn">Perform</button>
+                <button id="rest-btn">Rest</button>
+                <button id="heal-btn">Heal</button>
             </div>
         </section>
         <section id="back-stage">
@@ -53,19 +53,22 @@
                     </g>
                     <circle class="icon" cx="50" cy="50" r="18" fill="black"/>
                 </svg>
-                <div>Level: 1</div>
+                <div class="level">Level: 1</div>
                 <div class="stamina-bar">
                     <div class="stamina"></div>
                     <div class="damage"></div>
                 </div>
                 <div class="stamina-counter">Stamina: 100/100</div>
-                <button>Perform</button>
-                <button>Rest</button>
-                <button>Heal</button>
+                <button id="perform-btn">Perform</button>
+                <button id="rest-btn">Rest</button>
+                <button id="heal-btn">Heal</button>
             </div>
         </section>
-        <button>Hire</button>
-        <button>Expand Stage</button>
+        <section>
+            <button id="hire-btn">Hire</button>
+            <button id="expand-btn">Expand Stage</button>
+        </section>
+
     </main>
     <footer id="player-abilities">
         <button>Scavenge (3 Seconds)</button>
